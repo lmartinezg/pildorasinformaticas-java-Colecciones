@@ -1,0 +1,120 @@
+import java.util.Comparator;
+import java.util.TreeSet;
+
+// Referencias:
+//
+// Vídeo 188 - Colecciones
+//
+// TreeSet en clases que no implementan la interfaz Comparator<E>
+// Mismo ejemplo que anterior, pero utilizando una clase anónima
+
+public class V188_Prueba_TreeSet_III {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		TreeSet<String> ordenaPersonas = new TreeSet<String>();
+
+		ordenaPersonas.add("Sandra");
+		ordenaPersonas.add("Amanda");
+		ordenaPersonas.add("Diana");
+
+		// Aparecen en orden alfabético
+		// (String implementa la interfaz comparable)
+		System.out.println("TreeSet de String");
+		for (String s : ordenaPersonas) {
+			System.out.println(s);
+		}
+		System.out.println();
+
+		// Otro ejemplo con objetos de clase propia
+		V188_Articulo_III a1 = new V188_Articulo_III(1, "Primer artículo");
+		V188_Articulo_III a2 = new V188_Articulo_III(2, "Segundo artículo");
+		V188_Articulo_III a3 = new V188_Articulo_III(3, "Tercer artículo");
+
+		TreeSet<V188_Articulo_III> ordenaArticulos = new TreeSet<V188_Articulo_III>();
+		ordenaArticulos.add(a3);
+		ordenaArticulos.add(a1);
+		ordenaArticulos.add(a2);
+
+		// Aparecen en orden según el número de artículo
+		// La clase V188_Articulo_III implementa Comparable
+		System.out.println("TreeSet de V188_Articulo_III, clasificado por numero_articulo");
+		for (V188_Articulo_III art : ordenaArticulos) {
+			System.out.println(art.getDescripcion());
+		}
+		System.out.println();
+
+		// Nueva clase V188_Articulo_III con Comparator<E>
+		// Queremos crear un objeto comparador, pero el constructor preparado
+		// para V188_Articulo_III requiere dos parámetros (número y descripción)
+		// Es necesario añadir un nuevo constructor por defecto
+
+		// Se elimina V188_ComparadorArticulos_III
+		// V188_Articulo_III V188_ComparadorArticulos_III = new
+		// V188_Articulo_III();
+
+		// Se elimina el TreeSet
+		// TreeSet <V188_Articulo_III> ordenaArticulos=new
+		// TreeSet<V188_Articulo_III>(V188_ComparadorArticulos_III);
+
+		V188_Articulo_III a21 = new V188_Articulo_III(1, "Primer artículo");
+		V188_Articulo_III a22 = new V188_Articulo_III(2, "Segundo artículo");
+		V188_Articulo_III a23 = new V188_Articulo_III(3, "Tercer artículo");
+
+		// No hace falta instanciar si utilizamos una clase anónima
+		// V188_ComparadorArticulos_III compara_art = new
+		// V188_ComparadorArticulos_III();
+		// Creamos un nuevo TreeSet pasando el comparador como parámetro
+		// TreeSet<V188_Articulo_III> ordenaArticulos2 = new
+		// TreeSet<V188_Articulo_III>(compara_art);
+		
+		// Lo mismo que en el ejemplo anterior, pero utilizando clase anónima
+		TreeSet<V188_Articulo_III> ordenaArticulos2 = new TreeSet<V188_Articulo_III>(
+				new Comparator<V188_Articulo_III>() {
+					public int compare(V188_Articulo_III o1, V188_Articulo_III o2) {
+						String desc1 = o1.getDescripcion();
+						String desc2 = o2.getDescripcion();
+						return desc1.compareTo(desc2);
+					}
+				});
+
+		ordenaArticulos.add(a23);
+		ordenaArticulos.add(a21);
+		ordenaArticulos.add(a22);
+		System.out.println("TreeSet de V188_Articulo_III, clasificado por descripción");
+		for (V188_Articulo_III art : ordenaArticulos) {
+			System.out.println(art.getDescripcion());
+		}
+		System.out.println();
+
+	}
+
+}
+
+// Se elimina la interfaz Comparator<E>
+class V188_Articulo_III implements Comparable<V188_Articulo_III> {
+
+	// Se elimina el constructor por defecto V188_Articulo_III()
+
+	public V188_Articulo_III(int num, String desc) {
+		numero_articulo = num;
+		descripcion = desc;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	// Compara en base al número de artículo
+	@Override
+	public int compareTo(V188_Articulo_III o) {
+		// TODO Auto-generated method stub
+		return numero_articulo - o.numero_articulo;
+	}
+
+	// Se elimina el método compare()
+
+	private int numero_articulo;
+	private String descripcion;
+}
